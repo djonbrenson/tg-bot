@@ -25,11 +25,11 @@ function list() {
       },
       {
         onSuccess: () => {
-          message.success("اسلاید حذف شد");
+          message.success("Слайд удалён");
           refetch();
         },
         onError: () => {
-          message.error(" مشکل برای حذف رخ داد ");
+          message.error("Ошибка при удалении");
           refetch();
         }
       }
@@ -47,7 +47,7 @@ function list() {
 
   const columns = [
     {
-      title: "نام",
+      title: "Фото",
       key: "name",
       render: (_, record) => (
         <div className="h-full w-14">
@@ -59,17 +59,17 @@ function list() {
       )
     },
     {
-      title: "عملیات",
-      key: "عملیات",
+      title: "Действия",
+      key: "Действия",
       render: (_, record) => (
         <Space size="small">
           <Popconfirm
             placement="top"
-            title="حذف این اسلاید ؟"
+            title="Удалить этот слайд?"
             onConfirm={() => handleDeleteSlide(record.id)}
-            okText="حذف"
+            okText="Удалить"
             okType="default"
-            cancelText="انصراف">
+            cancelText="Отмена">
             <Button type="link" size="small" danger>
               <DeleteOutlined />
             </Button>
@@ -80,10 +80,10 @@ function list() {
   ];
   return (
     <Container
-      title="اسلایدر"
+      title="Слайдер"
       backwardUrl="/admin"
       customButton
-      customButtonTitle="افزودن"
+      customButtonTitle="Добавить"
       customButtonOnClick={() => navigate("add")}>
       <Table
         loading={isFetching || isLoading || deleteMutation.isLoading}

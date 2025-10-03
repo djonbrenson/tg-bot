@@ -17,7 +17,7 @@ function BotSetting() {
   const { data, isFetching, isLoading, refetch } = useGetBotSetting();
   const loading = isFetching || isLoading;
   return (
-    <Container backwardUrl={-1} title="تنظیمات ربات">
+    <Container backwardUrl={-1} title="Настройки бота">
       <Spin spinning={loading}>
         {loading ? (
           <div className="h-[300px] w-full" />
@@ -41,22 +41,22 @@ function BotSetting() {
                   },
                   {
                     onSuccess: () => {
-                      message.success("تنظیمات با موفقیت ثبت شد.");
+                      message.success("Настройки успешно сохранены.");
                       refetch();
                     },
                     onError: () => {
                       message.error(
-                        "ثبت با مشکل مواجه شد دقایقی دیگر تلاش کنید"
+                        "Ошибка сохранения, попробуйте позже."
                       );
                       refetch();
                     }
                   }
                 );
               }}>
-              <Form.Item label="پیام خوش آمد " required name="welcome_message">
+              <Form.Item label="Приветственное сообщение" required name="welcome_message">
                 <TextArea required rows={7} />
               </Form.Item>
-              <Form.Item label="درباره ما" required name="about_us">
+              <Form.Item label="О нас" required name="about_us">
                 <TextArea
                   required
                   rows={7}
@@ -64,7 +64,7 @@ function BotSetting() {
                   contentEditable
                 />
               </Form.Item>
-              <Form.Item label="تماس با ما" required name="contact_us">
+              <Form.Item label="Контакты" required name="contact_us">
                 <TextArea required rows={7} />
               </Form.Item>
 
@@ -76,33 +76,33 @@ function BotSetting() {
                 loading={mutation.isLoading}
                 // className="sticky bottom-3"
                 htmlType="submit">
-                ذخیره
+                Сохранить
               </Button>
             </Form>
             <Divider>
               <div className="flex gap-2">
                 <Popover
-                  content={<span>قابل تغییر نمیباشد</span>}
-                  title="Title"
+                  content={<span>Не подлежит изменению</span>}
+                  title="Заголовок"
                   trigger="click">
                   <InfoCircleOutlined />
                 </Popover>
-                اطلاعات تکمیلی
+                Дополнительная информация
               </div>
             </Divider>
             <div>
               <List className="w-full" bordered>
                 <List.Item>
                   <List.Item.Meta
-                    title="نام :"
-                    description={data?.owner_last_name || "ندارد"}
+                    title="Фамилия :"
+                    description={data?.owner_last_name || "Нет"}
                   />
                 </List.Item>
 
                 <List.Item>
                   <List.Item.Meta
-                    title="نام فروشگاه:"
-                    description={data?.shop_name || "ندارد"}
+                    title="Название магазина:"
+                    description={data?.shop_name || "Нет"}
                   />
                 </List.Item>
                 <List.Item>
@@ -113,8 +113,8 @@ function BotSetting() {
                 </List.Item>
                 <List.Item>
                   <List.Item.Meta
-                    title="شماره تماس admin :"
-                    description={data?.owner_phone_number || "ندارد"}
+                    title="Телефон администратора :"
+                    description={data?.owner_phone_number || "Нет"}
                   />
                 </List.Item>
               </List>

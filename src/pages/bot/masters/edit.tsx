@@ -39,7 +39,7 @@ function Edit() {
               setImageLinkList([...imageLinkList, `${e.data}`]);
             },
             onError: () => {
-              message.error("افزودن عکس با مشکل مواجه شد");
+              message.error("Возникла проблема с добавлением фотографии");
             }
           }
         );
@@ -62,7 +62,7 @@ function Edit() {
     refetch();
   }, [location]);
   return (
-    <Container backwardUrl={-1} title="اپدیت اساتید جدید">
+    <Container backwardUrl={-1} title="Редактировать мастера">
       <Spin spinning={isFetching || isLoading}>
         {isLoading || isFetching ? (
           <div className="h-[300px]" />
@@ -94,7 +94,7 @@ function Edit() {
                 },
                 {
                   onSuccess: () => {
-                    message.success(" استاد شما با موفقیت ثبت شد");
+                    message.success("Мастер успешно обновлён");
                     form.resetFields();
                     navigate(-1);
                   },
@@ -105,13 +105,13 @@ function Edit() {
                 }
               );
             }}>
-            <Form.Item name="name" required label="نام ">
+            <Form.Item name="name" required label="Имя">
               <Input required />
             </Form.Item>
-            <Form.Item name="last_Name" required label=" نام خانوادگی ">
+            <Form.Item name="last_Name" required label="Фамилия">
               <Input required />
             </Form.Item>
-            <Form.Item label="توضیحات" required name="description">
+            <Form.Item label="Описание" required name="description">
               <TextArea required rows={4} />
             </Form.Item>
             {/* <Form.Item label="Switch" valuePropName="checked">
@@ -120,7 +120,7 @@ function Edit() {
             <Form.Item
               className="mb-14 w-full"
               name="photos"
-              label="عکس"
+              label="Фото"
               valuePropName="photos">
               {mutationUploadPhotos.isLoading ? (
                 <Spin spinning />
@@ -146,7 +146,7 @@ function Edit() {
                           type="button"
                           className="h-full w-full border-[1px] border-dashed"
                           {...dragProps}>
-                          افزودن عکس
+                          Добавить фото
                         </button>
                         &nbsp;
                         <button
@@ -156,7 +156,7 @@ function Edit() {
                             onImageRemoveAll();
                             setImageLinkList([]);
                           }}>
-                          حذف همه
+                          Удалить все
                         </button>
                       </div>
                       <div className="grid h-[240px] w-full grid-cols-2 grid-rows-2  gap-y-7 overflow-x-auto overflow-y-scroll  ">
@@ -176,7 +176,7 @@ function Edit() {
                                   handleRemoveSingleImage(index);
                                   // onImageRemove(index)
                                 }}>
-                                حذف
+                                Удалить
                               </Button>
                             </div>
                           </div>
@@ -196,7 +196,7 @@ function Edit() {
               loading={mutation.isLoading}
               // className="sticky bottom-3"
               htmlType="submit">
-              ذخیره
+              Сохранить
             </Button>
           </Form>
         )}

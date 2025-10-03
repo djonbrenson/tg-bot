@@ -26,31 +26,31 @@ function OrderSetting({ orders }: Props) {
       },
       {
         onSuccess: () => {
-          message.success("وضعیت تغییر یافت");
+          message.success("Статус изменен");
         },
         onError: () => {
-          message.error("مشکلی رخ داده");
+          message.error("Произошла ошибка");
         }
       }
     );
   };
   return (
     <div className="flex flex-col gap-4">
-      <Divider> تعیین وضعیت سفارش</Divider>
+      <Divider> Изменить статус заказа</Divider>
       <Radio.Group onChange={onChange} defaultValue={status} value={status}>
-        <Radio.Button value="Pending"> در انتظار تایید </Radio.Button>
-        <Radio.Button value="Processing"> درحال انجام </Radio.Button>
-        <Radio.Button value="Packing"> درحال بسته بندی </Radio.Button>
-        <Radio.Button value="CancelledByCustomer">لغو توسط مشتری</Radio.Button>
+        <Radio.Button value="Pending"> Ожидает подтверждения </Radio.Button>
+        <Radio.Button value="Processing"> В процессе </Radio.Button>
+        <Radio.Button value="Packing"> Упаковывается </Radio.Button>
+        <Radio.Button value="CancelledByCustomer">Отменено клиентом</Radio.Button>
         <Radio.Button value="CancelledDueToUnavailability">
-          اتمام موجودی 1 یا چند کالا
+          Нет в наличии 1 или нескольких товаров
         </Radio.Button>
-        <Radio.Button value="CancelledByAdmin"> لغو توسط ادمین </Radio.Button>
-        <Radio.Button value="Shipped"> تحویل داده شده </Radio.Button>
+        <Radio.Button value="CancelledByAdmin"> Отменено админом </Radio.Button>
+        <Radio.Button value="Shipped"> Доставлено </Radio.Button>
       </Radio.Group>
 
       <div className="flex flex-col ">
-        <div className="text-right">کد رهگیری :</div>
+        <div className="text-right">Код отслеживания :</div>
         <Input
           onChange={(e) => {
             setTracking_Code(e.target.value);
@@ -65,7 +65,7 @@ function OrderSetting({ orders }: Props) {
         size="large"
         type="primary"
         ghost>
-        ذخیره
+        Сохранить
       </Button>
     </div>
   );

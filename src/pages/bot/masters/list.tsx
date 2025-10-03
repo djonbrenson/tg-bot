@@ -25,11 +25,11 @@ function BotMastersList() {
       },
       {
         onSuccess: () => {
-          message.success("کاربر حذف شد");
+          message.success("Мастер удалён");
           refetch();
         },
         onError: () => {
-          message.error(" مشکل برای حذف رخ داد ");
+          message.error("Ошибка при удалении");
           refetch();
         }
       }
@@ -47,14 +47,14 @@ function BotMastersList() {
 
   const columns = [
     {
-      title: "نام",
+      title: "Имя",
       dataIndex: "title",
       key: "name"
     },
     {
-      title: "عملیات",
-      dataIndex: "عملیات",
-      key: "عملیات",
+      title: "Действия",
+      dataIndex: "Действия",
+      key: "Действия",
       render: (_, record) => (
         <Space size="small">
           <Link state={record} to={`${record.id}`}>
@@ -62,11 +62,11 @@ function BotMastersList() {
           </Link>
           <Popconfirm
             placement="top"
-            title="حذف این استاد ؟"
+            title="Удалить этого мастера?"
             onConfirm={() => handleDeleteMaster(record.id)}
-            okText="حذف"
+            okText="Удалить"
             okType="default"
-            cancelText="انصراف">
+            cancelText="Отмена">
             <Button type="link" size="small" danger>
               <DeleteOutlined />
             </Button>
@@ -77,10 +77,10 @@ function BotMastersList() {
   ];
   return (
     <Container
-      title="اساتید"
+      title="Мастера"
       backwardUrl="/bot"
       customButton
-      customButtonTitle="افزودن"
+      customButtonTitle="Добавить"
       customButtonOnClick={() => navigate("add")}>
       <Table
         loading={isFetching || isLoading || deleteMutation.isLoading}

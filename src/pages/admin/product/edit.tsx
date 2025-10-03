@@ -69,7 +69,7 @@ function Edit() {
               }
             },
             onError: () => {
-              message.error("افزودن عکس با مشکل مواجه شد");
+              message.error("Ошибка при добавлении фото");
             }
           }
         );
@@ -105,11 +105,11 @@ function Edit() {
       { product_id, user_id: id },
       {
         onSuccess: (e) => {
-          message.success("محصول با موفقیت حذف شد ");
+          message.success("Товар успешно удалён");
           navigate("/admin/products");
         },
         onError: () => {
-          message.error(" مشکلی در حذف این محصول رخ داد. دوباره تلاش کنید");
+          message.error("Ошибка при удалении товара. Попробуйте снова");
         }
       }
     );
@@ -156,7 +156,7 @@ function Edit() {
                   },
                   {
                     onSuccess: () => {
-                      message.success(" محصول شما با موفقیت اپدیت شد");
+                      message.success("Товар успешно обновлён");
                       form.resetFields();
                       navigate("/admin/products");
                     },

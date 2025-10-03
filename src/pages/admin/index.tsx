@@ -8,19 +8,17 @@ function Admin() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-4">
-      منو ادمین
+      Меню администратора
       {/*
       <MainButtonDemo />
       <BackButtonDemo />
       <ShowPopupDemo />
       <HapticFeedbackDemo /> */}
-      <Button onClick={() => navigate("/admin/products")}>محصولات</Button>
-      <Button onClick={() => navigate("/admin/categories")}>
-        دسته بندی ها
-      </Button>
-      <Button onClick={() => navigate("/admin/orders")}>سفارشات کاربران</Button>
-      {/* <Button onClick={() => navigate("/admin/discounts")}> تخفیفات </Button> */}
-      <Button onClick={() => navigate("/admin/slider")}>اسلایدر </Button>
+      <Button onClick={() => navigate("/admin/products")}>Товары</Button>
+      <Button onClick={() => navigate("/admin/categories")}>Категории</Button>
+      <Button onClick={() => navigate("/admin/orders")}>Заказы пользователей</Button>
+      {/* <Button onClick={() => navigate("/admin/discounts")}> Скидки </Button> */}
+      <Button onClick={() => navigate("/admin/slider")}>Слайдер</Button>
     </div>
   );
 }

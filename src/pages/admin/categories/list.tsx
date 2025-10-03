@@ -51,12 +51,12 @@ function List() {
       { category_id: cat_id, user_id: id },
       {
         onSuccess: () => {
-          message.success("دسته بندی حذف شد");
+          message.success("Категория удалена");
           refetch();
         },
         onError: (err) => {
           if (err.response.status !== 404) {
-            message.error("حذف با مشکل مواجه شد");
+            message.error("Ошибка при удалении");
             refetch();
           } else {
             window.location.reload();
@@ -66,11 +66,11 @@ function List() {
     );
   };
   const config = (cat_id) => ({
-    title: " برای حذف این دسته بندی اطمینان دارید ؟",
+    title: "Вы уверены, что хотите удалить эту категорию?",
     content: <>sdd</>,
     okType: "danger",
-    cancelText: "انصراف",
-    okText: "حذف",
+    cancelText: "Отмена",
+    okText: "Удалить",
     onOk: () => handleDelete(cat_id)
   });
   useEffect(() => {
@@ -78,7 +78,7 @@ function List() {
   }, []);
   const columns: ColumnsType<TypeCategories> = [
     {
-      title: "نام",
+      title: "Название",
       dataIndex: "name",
       key: "name",
       render: (_, record) => (
@@ -86,7 +86,7 @@ function List() {
       )
     },
     {
-      title: "عملیات",
+      title: "Действия",
       key: "action",
       render: (_, record) => (
         <Space size="small">
@@ -105,7 +105,7 @@ function List() {
             <DeleteOutlined />
           </Button>
           <Link to={`/admin/categories/${record.category_Id}`}>
-            افزودن زیرمجموعه
+            Добавить подкатегорию
           </Link>
         </Space>
       )
@@ -116,9 +116,9 @@ function List() {
     <Container
       backwardUrl="/admin"
       customButton
-      customButtonTitle="افزودن"
+      customButtonTitle="Добавить"
       customButtonOnClick={() => navigate("/admin/categories/null")}
-      title="دسته بندی ها">
+      title="Категории">
       {/* <Container titleType="small" title="افزودن دسته بندی">
         <div className="flex gap-2">
           <Input />

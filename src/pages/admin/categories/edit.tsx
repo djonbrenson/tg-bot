@@ -57,8 +57,8 @@ function CategoriesEdit() {
     });
   // console.log(location);
   return (
-    <Container title="ویرایش دسته بندی " backwardUrl={-1}>
-      <Spin spinning={isLoadCategories} tip="در حال بارگیری ...">
+  <Container title="Редактировать категорию" backwardUrl={-1}>
+  <Spin spinning={isLoadCategories} tip="Загрузка ...">
         {isLoadCategories ? (
           <div className="h-screen" />
         ) : (
@@ -90,7 +90,7 @@ function CategoriesEdit() {
                   },
                   {
                     onSuccess: () => {
-                      message.success("دسته بندی شما با موفقیت ثبت شد");
+                      message.success("Категория успешно обновлена");
                       form.resetFields();
                       navigate("/admin/categories");
                     },
@@ -100,15 +100,15 @@ function CategoriesEdit() {
                   }
                 );
               }}>
-              <Form.Item name="name" required label="نام">
+              <Form.Item name="name" required label="Название">
                 <Input required />
               </Form.Item>
 
-              {/* <Form.Item name="description" label="توضیحات">
+              {/* <Form.Item name="description" label="Описание">
           <Input.TextArea />
         </Form.Item> */}
 
-              <Form.Item name="categories" label=" دسته بندی پدر یا زیر مجموعه">
+              <Form.Item name="categories" label="Родительская или дочерняя категория">
                 <Cascader
                   loading={isLoadCategories}
                   disabled={isLoadCategories}
@@ -125,8 +125,8 @@ function CategoriesEdit() {
                 />
               </Form.Item>
 
-              {/*
-        <Form.Item label="تخفیف (تومان) " name="quantity">
+              {/**
+        <Form.Item label="Скидка (руб.)" name="quantity">
         <InputNumber className="w-full" type="number" />
       </Form.Item> */}
 
@@ -138,7 +138,7 @@ function CategoriesEdit() {
                 ghost
                 className="mt-auto"
                 htmlType="submit">
-                ذخیره
+                Сохранить
               </Button>
             </Form>
             <Discount

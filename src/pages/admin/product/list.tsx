@@ -13,18 +13,18 @@ function ProductList() {
 
   return (
     <Container
-      title="محصولات"
+      title="Товары"
       backwardUrl="/admin"
       customButton
-      customButtonTitle="افزودن"
+      customButtonTitle="Добавить"
       customButtonOnClick={() => navigate("/admin/products/add")}>
       {/* <Suspense fallback={<ProductsSkeleton />}> */}
       {/* {isLoading || isFetching ? (
         <ProductsSkeleton />
       ) : error ? (
-        <>مشکلی رخ داده</>
+        <>Произошла ошибка</>
       ) : data?.products.length === 0 ? (
-        <Empty description="اطلاعاتی موجود نیست" />
+        <Empty description="Нет данных" />
       ) : (
         <ProductLists pageType="admin" data={data} />
       )} */}

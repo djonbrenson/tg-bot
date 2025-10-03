@@ -33,11 +33,11 @@ function AddAddress() {
       },
       {
         onSuccess: () => {
-          message.success("آدرس شما با موفقیت ثبت شد");
+          message.success("Ваш адрес успешно добавлен");
           setTimeout(() => navigate(-1), 1000);
         },
         onError: () => {
-          message.error("مشکلی رخ داده است لطفا دوباره تلاش کنید");
+          message.error("Произошла ошибка, попробуйте ещё раз");
         }
       }
     );
@@ -47,7 +47,7 @@ function AddAddress() {
     console.log("Failed:", errorInfo);
   };
   return (
-    <Container title="افزودن ادرس جدید" backwardUrl={-1}>
+    <Container title="Добавить новый адрес" backwardUrl={-1}>
       <Form
         disabled={mutation.isLoading}
         name="basic"
@@ -57,34 +57,39 @@ function AddAddress() {
         onFinishFailed={onFinishFailed}
         autoComplete="off">
         <Form.Item
-          label="کشور"
+          label="Страна"
           name="country"
-          rules={[{ required: true, message: "لطفا کشور را وارد کنید" }]}>
+          rules={[{ required: true, message: "Пожалуйста, введите страну" }]}
+        >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="استان"
+          label="Область/Регион"
           name="state"
-          rules={[{ required: true, message: "" }]}>
+          rules={[{ required: true, message: "Пожалуйста, введите область/регион" }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item
-          label="شهر"
+          label="Город"
           name="city"
-          rules={[{ required: true, message: "لطفا شهر وارد کنید " }]}>
+          rules={[{ required: true, message: "Пожалуйста, введите город" }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item
-          label="خیابان (کوچه و جاده)"
+          label="Улица (переулок и дорога)"
           name="street"
-          rules={[{ required: true, message: "لطفا خیابان وارد کنید " }]}>
+          rules={[{ required: true, message: "Пожалуйста, введите улицу" }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item
-          label="کد پستی"
+          label="Почтовый индекс"
           name="zipcode"
-          rules={[{ required: true, message: "لطفا کدپستی وارد کنید " }]}>
+          rules={[{ required: true, message: "Пожалуйста, введите почтовый индекс" }]}
+        >
           <Input />
         </Form.Item>
 
@@ -96,7 +101,7 @@ function AddAddress() {
             size="large"
             className="w-full"
             htmlType="submit">
-            افزودن ادرس
+            Добавить адрес
           </Button>
         </Form.Item>
       </Form>

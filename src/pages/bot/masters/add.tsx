@@ -34,7 +34,7 @@ function Add() {
               setImageLinkList([...imageLinkList, `${e.data}`]);
             },
             onError: () => {
-              message.error("افزودن عکس با مشکل مواجه شد");
+              message.error("Возникла проблема с добавлением фотографии");
             }
           }
         );
@@ -50,7 +50,7 @@ function Add() {
   };
 
   return (
-    <Container backwardUrl={-1} title="افزودن اساتید جدید">
+    <Container backwardUrl={-1} title="Добавить нового мастера">
       <Form
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 20 }}
@@ -75,7 +75,7 @@ function Add() {
             },
             {
               onSuccess: () => {
-                message.success(" استاد شما با موفقیت ثبت شد");
+                message.success("Мастер успешно добавлен");
                 form.resetFields();
                 navigate(-1);
               },
@@ -86,13 +86,13 @@ function Add() {
             }
           );
         }}>
-        <Form.Item name="name" required label="نام ">
+        <Form.Item name="name" required label="Имя">
           <Input required />
         </Form.Item>
-        <Form.Item name="last_Name" required label=" نام خانوادگی ">
+        <Form.Item name="last_Name" required label="Фамилия">
           <Input required />
         </Form.Item>
-        <Form.Item label="توضیحات" required name="description">
+        <Form.Item label="Описание" required name="description">
           <TextArea required rows={4} />
         </Form.Item>
         {/* <Form.Item label="Switch" valuePropName="checked">
@@ -101,7 +101,7 @@ function Add() {
         <Form.Item
           className="mb-14 w-full"
           name="photos"
-          label="عکس"
+          label="Фото"
           valuePropName="photos">
           {mutationUploadPhotos.isLoading ? (
             <Spin spinning />
@@ -127,7 +127,7 @@ function Add() {
                       type="button"
                       className="h-full w-full border-[1px] border-dashed"
                       {...dragProps}>
-                      افزودن عکس
+                      Добавить фото
                     </button>
                     &nbsp;
                     <button
@@ -137,7 +137,7 @@ function Add() {
                         onImageRemoveAll();
                         setImageLinkList([]);
                       }}>
-                      حذف همه
+                      Удалить все
                     </button>
                   </div>
                   <div className="grid h-[240px] w-full grid-cols-2 grid-rows-2  gap-y-7 overflow-x-auto overflow-y-scroll  ">
@@ -157,7 +157,7 @@ function Add() {
                               handleRemoveSingleImage(index);
                               // onImageRemove(index)
                             }}>
-                            حذف
+                            Удалить
                           </Button>
                         </div>
                       </div>
@@ -177,7 +177,7 @@ function Add() {
           loading={mutation.isLoading}
           // className="sticky bottom-3"
           htmlType="submit">
-          ذخیره
+          Сохранить
         </Button>
       </Form>
     </Container>
