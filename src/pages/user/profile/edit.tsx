@@ -2,8 +2,6 @@ import Container from "@components/container";
 import useGetUserInfo from "@framework/api/user-information/get";
 import useUpdateUser from "@framework/api/user-information/update";
 import useTelegramUser from "@hooks/useTelegramUser";
-// ВНИМАНИЕ: этот валидатор проверяет только иранские номера. Для РФ может потребоваться другая логика.
-import { phoneNumberValidator } from "@persian-tools/persian-tools"; 
 import { Button, Form, Input, message, Spin } from "antd";
 import { useNavigate } from "react-router";
 
@@ -39,12 +37,16 @@ function EditProfile() {
               username: data?.username
             }}
             onFinish={(values) => {
-              // Валидация номера телефона. Для РФ может потребоваться другая.
-              if (!phoneNumberValidator(values.phone_number)) {
+              // НАША ПРОСТАЯ ВАЛИДАЦИЯ для номеров РФ
+              const phone = String(values.phone_number);
+              const isValidPhone = (phone.startsWith('8') || phone.startsWith('7')) && phone.length === 11;
+
+              if (!isValidPhone) {
                 // ПЕРЕВЕДЕНО
-                message.error("Введенный номер телефона некорректен");
+                message.error("Введенный номер телефона некорректен. Он должен начинаться с 7 или 8 и содержать 11 цифр.");
                 form.scrollToField("phone_number");
-              } else {
+              }
+              else {
                 mutation.mutate(values, {
                   onSuccess: () => {
                     // ПЕРЕВЕДЕНО

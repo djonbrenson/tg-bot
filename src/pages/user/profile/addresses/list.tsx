@@ -13,18 +13,29 @@ import { useLocation, useNavigate } from "react-router";
 
 function AddessesList() {
   const navigate = useNavigate();
-  const { id } = useTelegramUser();
-  const { data, isLoading, isFetching, refetch } = useGetAddresses(id);
+  // ИСПРАВЛЕНО: Безопасно получаем пользователя и его ID
+  const user = useTelegramUser();
+  const userId = user?.id ? String(user.id) : "";
+
+  // ИСПРАВЛЕНО: Используем безопасный userId
+  const { data, isLoading, isFetching, refetch } = useGetAddresses(userId);
   const deleteMutation = useDeleteAddress();
   const location = useLocation();
+
   useEffect(() => {
-    refetch();
-  }, [location]);
+    // Добавим проверку, чтобы не делать лишний запрос, если ID еще нет
+    if (userId) {
+      refetch();
+    }
+  }, [location, userId]);
+
   return (
     <Container
-      title=" آدرس ها"
+      // ПЕРЕВЕДЕНО
+      title="Мои адреса"
       customButton
-      customButtonTitle="افزودن آدرس"
+      // ПЕРЕВЕДЕНО
+      customButtonTitle="Добавить адрес"
       customButtonOnClick={() => navigate("add")}
       backwardUrl="/">
       <List
@@ -34,12 +45,7 @@ function AddessesList() {
         renderItem={(item, index) => (
           <List.Item key={index}>
             <List.Item.Meta
-              // avatar={
-              //   <Avatar
-              //     src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
-              //   />
-              // }
-              title={<div className="w-full text-start">{item.city}</div>}
+              title={<div className="w-full text-start">{item.city}, {item.street}</div>}
               description={
                 <div className="flex gap-3  ">
                   <div className="flex flex-row-reverse gap-2">
@@ -55,38 +61,48 @@ function AddessesList() {
             <div className="flex gap-2">
               <Popconfirm
                 placement="left"
-                title="از حذف اطمینان دارید ؟"
-                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                // ПЕРЕВЕДЕНО
+                title="Вы уверены, что хотите удалить?"
                 onConfirm={() => {
+                  // ИСПРАВЛЕНО: Добавляем проверку, что все ID на месте
+                  if (!userId || item.address_Id === undefined) {
+                    message.error("Не удалось получить данные для удаления");
+                    return;
+                  }
                   deleteMutation.mutate(
-                    { user_id: id, address_id: item.address_Id },
+                    { user_id: userId, address_id: item.address_Id },
                     {
                       onSuccess: () => {
-                        message.success("آدرس با موفقیت حذف شد");
+                        // ПЕРЕВЕДЕНО
+                        message.success("Адрес успешно удален");
                         refetch();
                       },
-                      onError: (e) => {
-                        console.log(e);
-                        message.error("حذف نشد دوباره تلاش کنید!");
+                      onError: () => {
+                        // ПЕРЕВЕДЕНО
+                        message.error("Произошла ошибка. Попробуйте снова");
                         refetch();
                       }
                     }
                   );
                 }}
-                okText="حذف"
+                // ПЕРЕВЕДЕНО
+                okText="Удалить"
                 okType="default"
-                cancelText="انصراف">
+                // ПЕРЕВЕДЕНО
+                cancelText="Отмена">
                 <Button
                   key={index}
                   size="small"
                   loading={deleteMutation.isLoading}>
-                  حذف
+                  {/* ПЕРЕВЕДЕНО */}
+                  Удалить
                 </Button>
               </Popconfirm>
               <Button
                 onClick={() => navigate(`${item.address_Id}`)}
                 size="small">
-                ویرایش
+                {/* ПЕРЕВЕДЕНО */}
+                Изменить
               </Button>
             </div>
           </List.Item>
