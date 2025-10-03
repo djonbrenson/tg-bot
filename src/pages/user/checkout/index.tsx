@@ -1,6 +1,8 @@
+// src/pages/user/checkout/index.tsx - ФИНАЛЬНАЯ ИСПРАВЛЕННАЯ ВЕРСИЯ
+
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/jsx-wrap-multilines */
+/* eslint-disable react/jsx-wrap-multiline */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-unused-expressions */
@@ -8,107 +10,125 @@
 import Container from "@components/container";
 import { useGetAddresses } from "@framework/api/address/get";
 import { useGetCarts } from "@framework/api/cart/get";
-import useAddOrder from "@framework/api/orders/add";
-import useAddReceiptPhotos from "@framework/api/receipt-photos/add";
+// ИСПРАВЛЕНО: импортируем правильный тип из твоего файла types.ts
+import { TypeCartItems } from "@framework/types"; 
 import useTelegramUser from "@hooks/useTelegramUser";
 import { addCommas } from "@persian-tools/persian-tools";
 import { Alert, Button, Form, Input, message, Select, Spin } from "antd";
 import { useEffect, useState } from "react";
-import ImageUploading from "react-images-uploading";
 import { useLocation, useNavigate } from "react-router";
+import axios from "axios";
 
 function Checkout() {
-  const [images, setImages] = useState([]);
-  const [imagesLoading, setImagesLoading] = useState(false);
-  const [receiptPhoto, setReceiptPhoto] = useState<null | string>(null);
-  const { id } = useTelegramUser();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const user = useTelegramUser();
   const { state: locState } = useLocation();
   const navigate = useNavigate();
-  const mutationPhotos = useAddReceiptPhotos();
-  const mutationOrder = useAddOrder();
 
-  const {
-    data: CartData,
-    isFetching: CartFetching,
-    isLoading: CartLoading
-  } = useGetCarts(id);
+  const userId = user?.id;
 
-  const onChangeImage = async (imageList) => {
-    imageList.length && setImagesLoading(true);
-    // setImages(imageList);
-    imageList.length &&
-      mutationPhotos.mutate(
-        {
-          photo_base64: imageList[0].data_url.split(",")[1]
-        },
-        {
-          onSuccess: (e) => {
-            setImages(imageList);
-            setReceiptPhoto(`${e.data}`);
-            setImagesLoading(false);
-          },
+  // ИСПРАВЛЕНО: Вызываем хуки только с одним аргументом (ID пользователя) и преобразуем его в строку
+  const { data: CartData, isLoading: isCartLoading } = useGetCarts(
+    userId ? String(userId) : ""
+  );
+  const { data: addressData, isLoading: isAddressLoading, refetch } = useGetAddresses(
+    userId ? String(userId) : ""
+  );
 
-          onError: () => {
-            message.error("در آپلود عکس مشکلی پیش آمده لطفا دوباره تلاش کنید!");
-            setImagesLoading(false);
-          }
-        }
-      );
-  };
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
-  const { data, error, refetch, isFetching, isLoading } = useGetAddresses(id);
 
   useEffect(() => {
     if (!locState) {
       navigate("/cart");
-    } else {
+    } else if (userId) {
       refetch();
     }
-  }, [locState]);
+  }, [locState, userId, refetch, navigate]);
 
   useEffect(() => {
-    if (!data || !data?.addresses) {
-      // navigate("/profile/address/add");
+    if (!isAddressLoading && (!addressData || !addressData?.addresses || addressData?.addresses.length === 0)) {
       message.warning({
-        content: "باید قبل از پرداخت آدرس اضافه کنید ",
+        content: "Пожалуйста, добавьте адрес в профиле, прежде чем продолжить",
         duration: 3
       });
     }
-  }, [data, error]);
-  const personCart = {
-    name: "سینا صالحی",
-    cartNumber: "6219861065233172"
+  }, [addressData, isAddressLoading]);
+
+  const handleOrderSubmit = async (values: any) => {
+    // ИСПРАВЛЕНО: Проверяем наличие cartItems вместо products
+    if (!user || !CartData || !CartData.cartItems) {
+      message.error("Не удалось загрузить данные для заказа. Попробуйте обновить страницу.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const selectedAddress = addressData?.addresses.find(
+      (addr) => addr.address_Id === values.address
+    );
+    const addressString = selectedAddress
+      ? `${selectedAddress.country}, ${selectedAddress.state}, ${selectedAddress.city}, ${selectedAddress.street}, ${selectedAddress.zipcode}`
+      : "Адрес не выбран";
+
+    const orderPayload = {
+      customer: {
+        first_name: user.first_name || "Не указано",
+        last_name: user.last_name || "Не указано",
+        phone_number: "Не указан"
+      },
+      // ИСПРАВЛЕНО: 
+      // 1. Используем правильный массив `CartData.cartItems`
+      // 2. Указываем правильный тип `TypeCartItems` для `item`
+      // 3. Берем `name` из `item.product_Name`
+      products: CartData.cartItems.map((item: TypeCartItems) => ({
+        product: {
+          id: item.product_Id,
+          name: item.product_Name 
+        },
+        quantity: item.quantity
+      })),
+      address: {
+        address: addressString
+      },
+      description: values.order_Description || "Нет комментария",
+      totalPrice: CartData.totalPrice
+    };
+
+    try {
+      const backendUrl = `${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_SHOP_NAME}/${import.meta.env.VITE_API_VERSION}/orders/add`;
+      await axios.post(backendUrl, orderPayload);
+      message.success("Ваш заказ успешно оформлен! Мы скоро с вами свяжемся.");
+      navigate("/");
+    } catch (err) {
+      console.error("Ошибка при отправке заказа:", err);
+      message.error("Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте еще раз.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isCartLoading || isAddressLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
   return (
-    <Container title="پرداخت سفارش و ثبت" backwardUrl={-1}>
+    <Container title="Оформление заказа" backwardUrl={-1}>
       <div>
         <Alert
           message={
             <div>
-              <div className="mb-2"> اطلاعات حساب برای واریز مبلغ</div>
+              <div className="mb-2">Информация о заказе</div>
               <div className="flex flex-col items-center justify-center">
-                <div
-                  className="flex w-fit items-center justify-between gap-2 rounded-lg bg-white/10 px-3 py-1 "
-                  onClick={() => {
-                    navigator.clipboard.writeText(personCart.cartNumber);
-                    message.success("شماره کارت کپی شد ");
-                  }}>
-                  <div>شماره کارت : {personCart.cartNumber}</div>
-                  <Button>کپی</Button>
-                </div>
-                <br />
                 <span>
-                  به نام:
-                  <b className="mr-2 text-lg">{personCart.name}</b>
-                </span>
-                <br />
-
-                <span>
-                  مبلغ واریز:
+                  Итоговая сумма:
                   <b className="mr-2 gap-3 text-lg">
-                    {addCommas(CartData?.totalPrice) || 0} <span>تومان</span>
+                    {addCommas(CartData?.totalPrice || 0)} <span>руб.</span>
                   </b>
                 </span>
               </div>
@@ -118,11 +138,6 @@ function Checkout() {
           showIcon
         />
         <br />
-        <Alert
-          message="آپلود عکس رسید پرداخت شده ضروری میباشد. بعد از آپلود میتوانید ثبت سفارش کنید"
-          type="warning"
-          showIcon
-        />
 
         <Form
           className="mt-5"
@@ -130,96 +145,17 @@ function Checkout() {
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
           style={{ maxWidth: 600 }}
-          onFinish={(val) => {
-            if (receiptPhoto) {
-              mutationOrder.mutate(
-                {
-                  order_Description: val.order_Description,
-                  shipping_Cost: 0,
-                  receipt_Photo_Path: receiptPhoto,
-                  user_Address_Id: val.address,
-                  user_Id: `${id}`
-                },
-                {
-                  onSuccess: () => {
-                    message.success(
-                      "سفارش شما با موفقیت ثبت شد از حساب کاربری میتوانید سفارش خود را دنبال کنید."
-                    );
-                    navigate("/");
-                  }
-                }
-              );
-            } else {
-              message.error("لطفا عکس رسید پرداخت خود را وارد کنید.");
-            }
-          }}
+          onFinish={handleOrderSubmit}
           onFinishFailed={onFinishFailed}
           autoComplete="off">
-          <Spin spinning={imagesLoading} tip="درحال اپلود">
-            <Form.Item
-              className="mb-14 w-full"
-              name="photos"
-              label=" عکس رسید پرداخت"
-              required
-              valuePropName="photos">
-              <ImageUploading
-                value={images}
-                onChange={onChangeImage}
-                maxNumber={1}
-                dataURLKey="data_url">
-                {({ onImageUpload, onImageRemove, isDragging, dragProps }) => (
-                  // write your building UI
-                  <div className="upload__image-wrapper flex flex-col">
-                    {!images.length && (
-                      <div className="mb-5 flex h-[60px]  w-full">
-                        <button
-                          style={isDragging ? { color: "red" } : undefined}
-                          onClick={onImageUpload}
-                          type="button"
-                          className="h-full w-full border-[1px] border-dashed"
-                          {...dragProps}>
-                          افزودن عکس
-                        </button>
-                      </div>
-                    )}
-                    <div className="grid h-fit w-full grid-cols-1 grid-rows-1  gap-y-7   ">
-                      {images?.map((image, index) => (
-                        <div
-                          key={index}
-                          className=" flex h-full w-full flex-col gap-2 rounded-lg">
-                          <img
-                            src={image.data_url}
-                            alt=""
-                            className="h-full w-full rounded-lg "
-                          />
-                          <div className="flex justify-between gap-3">
-                            <Button
-                              danger
-                              className="w-full"
-                              htmlType="button"
-                              onClick={() => {
-                                setReceiptPhoto(null);
-                                setImages([]);
-                              }}>
-                              حذف
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </ImageUploading>
-            </Form.Item>
-          </Spin>
-
-          <Form.Item name="address" label="آدرس" rules={[{ required: true }]}>
+          
+          <Form.Item name="address" label="Адрес" rules={[{ required: true }]}>
             <Select
-              loading={isFetching || isLoading}
-              placeholder="آدرس خود را انتخاب کنید"
+              loading={isAddressLoading}
+              placeholder="Выберите ваш адрес"
               allowClear>
-              {data?.addresses.map((item) => (
-                <Select.Option value={item.address_Id}>
+              {addressData?.addresses.map((item) => (
+                <Select.Option key={item.address_Id} value={item.address_Id}>
                   {item.country},{item.state},{item.city},{item.street},
                   {item.zipcode} ...
                 </Select.Option>
@@ -227,18 +163,18 @@ function Checkout() {
             </Select>
           </Form.Item>
 
-          <Form.Item name="order_Description" label="اطلاعات تکمیلی">
-            <Input.TextArea rows={4} />
+          <Form.Item name="order_Description" label="Дополнительная информация">
+            <Input.TextArea rows={4} placeholder="Например, 'позвонить за час до доставки'"/>
           </Form.Item>
 
           <Button
-            disabled={images.length === 0 && data?.addresses.length === 0}
-            loading={mutationOrder.isLoading}
+            disabled={!addressData?.addresses || addressData?.addresses.length === 0}
+            loading={isSubmitting}
             type="default"
             className="w-full"
             size="large"
             htmlType="submit">
-            ثبت سفارش
+            Оформить заказ
           </Button>
         </Form>
       </div>
