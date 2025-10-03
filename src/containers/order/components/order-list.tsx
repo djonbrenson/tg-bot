@@ -25,7 +25,7 @@ function OrderList({ loading, orders }: Props) {
             <List.Item.Meta
               title={
                 <Link to={`/products/${item.product_Id}`}>
-                  نام محصول :
+                  Название товара:
                   <br />
                   {item.product_Name}
                 </Link>
@@ -34,28 +34,28 @@ function OrderList({ loading, orders }: Props) {
 
             <div className="flex flex-col gap-3  ">
               <div className="flex flex-row-reverse gap-1">
-                <span>تومان</span>
+                <span>руб.</span>
                 <span>{addCommas(item.final_Price)}</span>
-                <span> قیمت واحد :</span>
+                <span> Цена за единицу:</span>
               </div>
               <div className="flex flex-row-reverse gap-1">
-                <span>عدد</span>
+                <span>шт.</span>
                 <span>{item.quantity}</span>
-                <span> تعداد :</span>
+                <span> Количество:</span>
               </div>
 
               <div className="flex flex-row-reverse gap-1">
-                <span>تومان</span>
+                <span>руб.</span>
                 <span>{addCommas(item.final_Price * item.quantity)}</span>
-                <span> قیمت کل :</span>
+                <span> Общая цена:</span>
               </div>
             </div>
           </List.Item>
         )}
       />
-      <Divider> مجموع قیمت </Divider>
+      <Divider> Общая стоимость </Divider>
       <div>
-        <span>{addCommas(orders?.total_Price || 0)}</span> <span>تومان</span>
+        <span>{addCommas(orders?.total_Price || 0)}</span> <span>руб.</span>
       </div>
     </>
   );

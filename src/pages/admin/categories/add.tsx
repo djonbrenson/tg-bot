@@ -16,13 +16,15 @@ interface FromProps {
 function CategoriesAdd() {
   const [form] = Form.useForm();
   const mutation = useAddCategories();
-  const { id } = useTelegramUser();
-  // const { data, refetch, isLoading, isFetching } = useGetCategories();
-  // const isLoadCategories = isLoading || isFetching;
+  // ИСПРАВЛЕНО: Безопасно получаем пользователя
+  const user = useTelegramUser();
+  const userId = user?.id ? String(user.id) : "";
+
   const { parentId } = useParams();
   const navigate = useNavigate();
   return (
-    <Container title="افزودن دسته بندی " backwardUrl={-1}>
+    // ПЕРЕВЕДЕНО
+    <Container title="Добавление категории" backwardUrl={-1}>
       <Form
         form={form}
         labelCol={{ span: 5 }}
@@ -30,54 +32,35 @@ function CategoriesAdd() {
         layout="horizontal"
         className="flex  h-full flex-col items-stretch justify-start"
         onFinish={({ name }: FromProps) => {
-          // console.log("params", name, parentId);
+          if (!userId) {
+            message.error("Не удалось получить ID пользователя");
+            return;
+          }
           mutation.mutate(
             {
-              user_id: `${id}`,
+              user_id: userId,
               category_name: name,
-              parent_id: (parentId && parseInt(parentId)) || null
+              // ИСПРАВЛЕНО: Правильно обрабатываем parent_id
+              parent_id: parentId ? parseInt(parentId) : undefined
             },
             {
               onSuccess: () => {
-                message.success("دسته بندی شما با موفقیت ثبت شد");
+                // ПЕРЕВЕДЕНО
+                message.success("Категория успешно добавлена");
                 form.resetFields();
                 navigate("/admin/categories");
               },
-              onError: (err) => {
-                message.error("مشکلی رخ داده است لطفا دقایقی دیگر تلاش کنید");
-                console.log(err);
+              onError: () => {
+                // ПЕРЕВЕДЕНО
+                message.error("Произошла ошибка. Попробуйте позже.");
               }
             }
           );
         }}>
-        <Form.Item name="name" required label="نام">
+        {/* ПЕРЕВЕДЕНО */}
+        <Form.Item name="name" required label="Название">
           <Input required />
         </Form.Item>
-
-        {/* <Form.Item name="description" label="توضیحات">
-          <Input.TextArea />
-        </Form.Item> */}
-
-        {/* <Form.Item name="categories" label=" دسته بندی پدر یا زیر مجموعه">
-          <Cascader
-            loading={isLoadCategories}
-            disabled={isLoadCategories}
-            style={{ width: "100%" }}
-            options={data}
-            fieldNames={{
-              label: "category_Name",
-              value: "category_Id",
-              children: "children"
-            }}
-            multiple
-            maxTagCount="responsive"
-          />
-        </Form.Item>
-         */}
-        {/*
-        <Form.Item label="تخفیف (تومان) " name="quantity">
-        <InputNumber className="w-full" type="number" />
-      </Form.Item> */}
 
         <Button
           type="primary"
@@ -88,7 +71,8 @@ function CategoriesAdd() {
           ghost
           className="mt-auto"
           htmlType="submit">
-          ذخیره
+          {/* ПЕРЕВЕДЕНО */}
+          Сохранить
         </Button>
       </Form>
     </Container>

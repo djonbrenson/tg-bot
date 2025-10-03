@@ -68,7 +68,8 @@ function ProductItem({
       <div
         className=" relative ml-auto h-full  w-1/3 bg-[var(--tg-theme-secondary-bg-color)] bg-cover"
         style={{
-          backgroundImage: `url('${import.meta.env.VITE_API_URL}/${imageURL}')`
+          backgroundImage: `url('/${imageURL}')`
+          //backgroundImage: `url('${import.meta.env.VITE_API_URL}/${imageURL}')`
         }}>
         {finalPrice && (
           <span className="absolute right-0 top-0 rounded-bl-lg bg-red-700 p-2">

@@ -116,8 +116,8 @@ function Edit() {
   };
 
   return (
-    <Container backwardUrl="/admin/products" title="بروز رسانی محصول ">
-      <Spin spinning={componentDisabled} tip="در حال بارگیری ...">
+    <Container backwardUrl="/admin/products" title="Обновить товар">
+  <Spin spinning={componentDisabled} tip="Загрузка ...">
         {componentDisabled ? (
           <div className="h-screen" />
         ) : (
@@ -166,10 +166,10 @@ function Edit() {
                   }
                 );
               }}>
-              <Form.Item name="product_name" required label="نام محصول">
+              <Form.Item name="product_name" required label="Название товара">
                 <Input required />
               </Form.Item>
-              <Form.Item name="category_ids" required label="دسته بندی">
+              <Form.Item name="category_ids" required label="Категория">
                 {/* <Cascader
                 style={{ width: "100%" }}
                 options={categoriesData}
@@ -203,7 +203,7 @@ function Edit() {
                 />
               </Form.Item>
 
-              <Form.Item label="قیمت (تومان) " required name="price">
+              <Form.Item label="Цена (руб.)" required name="price">
                 <InputNumber
                   required
                   // onChange={(e) => setPriceEnterd(e || productData?.price)}
@@ -217,18 +217,18 @@ function Edit() {
               {/* <div className="-mt-4">
               {numberToWords(priceEnterd)} <b>تومان</b>
             </div> */}
-              <Form.Item label="تعداد موجودی" required name="quantity">
+              <Form.Item label="Количество на складе" required name="quantity">
                 <InputNumber required type="number" className="w-1/2" />
               </Form.Item>
 
-              <Form.Item label="توضیحات" required name="description">
+              <Form.Item label="Описание" required name="description">
                 <TextArea rows={10} />
               </Form.Item>
 
               <Form.Item
                 className="w-full"
                 name="photos"
-                label="عکس محصول"
+                label="Фото товара"
                 valuePropName="photos">
                 {mutationUploadPhotos.isLoading ? (
                   <Spin spinning />
@@ -254,7 +254,7 @@ function Edit() {
                             type="button"
                             className="h-full w-full border-[1px] border-dashed"
                             {...dragProps}>
-                            افزودن عکس
+                            Добавить фото
                           </button>
                           &nbsp;
                           <button
@@ -264,7 +264,7 @@ function Edit() {
                               onImageRemoveAll();
                               setImageLinkList([]);
                             }}>
-                            حذف همه
+                            Удалить все
                           </button>
                         </div>
                         <div className="grid h-[240px] w-full grid-cols-2 grid-rows-2  gap-y-7 overflow-x-auto overflow-y-scroll  ">
@@ -284,7 +284,7 @@ function Edit() {
                                     handleRemoveSingleImage(index);
                                     // onImageRemove(index)
                                   }}>
-                                  حذف
+                                  Удалить
                                 </Button>
                               </div>
                             </div>
@@ -299,17 +299,17 @@ function Edit() {
               <div className="flex gap-3">
                 <Popconfirm
                   placement="top"
-                  title="حذف این محصول ؟"
+                  title="Удалить этот товар?"
                   onConfirm={() => handleDeleteProduct()}
-                  okText="حذف"
+                  okText="Удалить"
                   okType="default"
-                  cancelText="انصراف">
+                  cancelText="Отмена">
                   <Button
                     size="large"
                     loading={deleteMutation.isLoading}
                     style={{ width: "36%" }}
                     danger>
-                    حذف محصول
+                    Удалить товар
                   </Button>
                 </Popconfirm>
                 <Button
@@ -320,7 +320,7 @@ function Edit() {
                   ghost
                   // className="sticky bottom-3"
                   htmlType="submit">
-                  ذخیره
+                  Сохранить
                 </Button>
               </div>
             </Form>

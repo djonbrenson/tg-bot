@@ -1,0 +1,35 @@
+{
+  "page": 1,
+  "limit": 10,
+  "totalRows": 2,
+  "products": [
+    {
+      "product_Id": 1,
+      "product_Name": "Классический Бургер",
+      "price": 350,
+      "discountedPrice": 350,
+      "quantity": 15,
+      "description": "Наш фирменный бургер с сочной говяжьей котлетой, свежими овощами, сыром чеддер и специальным соусом на булочке бриошь.",
+      "categoryIds": [10],
+      "photo_path": "images/burger.jpg",
+      "updated_At": "2025-10-03T12:00:00Z",
+      "discount": null
+    },
+    {
+      "product_Id": 2,
+      "product_Name": "Чикагский Хот-дог",
+      "price": 280,
+      "discountedPrice": 250,
+      "quantity": 22,
+      "description": "Настоящий хот-дог в чикагском стиле с говяжьей сосиской, маринованными огурчиками, помидорами, луком и горчицей.",
+      "categoryIds": [10],
+      "photo_path": "images/hotdog.jpg",
+      "updated_At": "2025-10-03T12:05:00Z",
+      "discount": {
+        "discount_Id": 1,
+        "discount_Type": "price",
+        "discount_Value": 30
+      }
+    }
+  ]
+}

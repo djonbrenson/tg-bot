@@ -54,7 +54,7 @@ function Add() {
               setImageLinkList([...imageLinkList, `${e.data}`]);
             },
             onError: () => {
-              message.error("افزودن عکس با مشکل مواجه شد");
+              message.error("Ошибка при добавлении изображения");
             }
           }
         );
@@ -70,7 +70,7 @@ function Add() {
   };
 
   return (
-    <Container backwardUrl={-1} title="افزودن محصول جدید">
+    <Container backwardUrl={-1} title="Добавить новый товар">
       <Form
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 20 }}
@@ -99,7 +99,7 @@ function Add() {
             },
             {
               onSuccess: () => {
-                message.success(" محصول شما با موفقیت ثبت شد");
+                message.success("Товар успешно добавлен");
                 form.resetFields();
                 navigate("/admin/products");
               },
@@ -110,10 +110,10 @@ function Add() {
             }
           );
         }}>
-        <Form.Item name="product_name" required label="نام محصول">
+        <Form.Item name="product_name" required label="Название товара">
           <Input required />
         </Form.Item>
-        <Form.Item name="category_ids" label="دسته بندی">
+        <Form.Item name="category_ids" label="Категория">
           {/* <Cascader
             style={{ width: "100%" }}
             options={categoriesData}
@@ -152,7 +152,7 @@ function Add() {
       <Form.Item label="RangePicker">
         <RangePicker />
       </Form.Item> */}
-        <Form.Item label="قیمت (تومان) " required name="price">
+  <Form.Item label="Цена (руб.)" required name="price">
           <InputNumber
             // onChange={(e) => setPriceEnterd(e || 0)}
             formatter={(value) =>
@@ -167,13 +167,13 @@ function Add() {
         {/* <div className="-mt-4">
           {numberToWords(priceEnterd)} <b>تومان</b>
         </div> */}
-        <Form.Item label="تعداد موجودی" required name="quantity">
+        <Form.Item label="Количество на складе" required name="quantity">
           <InputNumber required type="number" className="w-1/2" />
         </Form.Item>
         {/* <Form.Item label="تعداد موجودی " name="stock">
           <InputNumber type="number" />
         </Form.Item> */}
-        <Form.Item label="توضیحات" required name="description">
+        <Form.Item label="Описание" required name="description">
           <TextArea required rows={10} />
         </Form.Item>
         {/* <Form.Item label="Switch" valuePropName="checked">
@@ -182,7 +182,7 @@ function Add() {
         <Form.Item
           className="mb-14 w-full"
           name="photos"
-          label="عکس محصول"
+          label="Фото товара"
           valuePropName="photos">
           {mutationUploadPhotos.isLoading ? (
             <Spin spinning />
@@ -208,7 +208,7 @@ function Add() {
                       type="button"
                       className="h-full w-full border-[1px] border-dashed"
                       {...dragProps}>
-                      افزودن عکس
+                      Добавить фото
                     </button>
                     &nbsp;
                     <button
@@ -218,7 +218,7 @@ function Add() {
                         onImageRemoveAll();
                         setImageLinkList([]);
                       }}>
-                      حذف همه
+                      Удалить все
                     </button>
                   </div>
                   <div className="grid h-[240px] w-full grid-cols-2 grid-rows-2  gap-y-7 overflow-x-auto overflow-y-scroll  ">
@@ -238,7 +238,7 @@ function Add() {
                               handleRemoveSingleImage(index);
                               // onImageRemove(index)
                             }}>
-                            حذف
+                            Удалить
                           </Button>
                         </div>
                       </div>
@@ -258,7 +258,7 @@ function Add() {
           loading={mutation.isLoading}
           // className="sticky bottom-3"
           htmlType="submit">
-          ذخیره
+          Сохранить
         </Button>
       </Form>
     </Container>
