@@ -23,7 +23,6 @@ function Container({
 }: Props) {
   const navigate = useNavigate();
 
-  // eslint-disable-next-line operator-linebreak
   const headerStyle =
     titleType === "default"
       ? "sticky top-1 z-30 flex items-center justify-between gap-1 rounded-lg bg-[var(--tg-theme-secondary-bg-color)] p-3"
@@ -40,8 +39,20 @@ function Container({
           </Button>
         )}
         {backwardUrl && (
-          <Button type="primary" ghost onClick={() => navigate(backwardUrl)}>
-            بازگشت
+          <Button
+            type="primary"
+            ghost
+            onClick={() => {
+              // ИСПРАВЛЕНО: Добавляем проверку, чтобы TypeScript понял,
+              // какой режим navigate() использовать - для строки или для числа.
+              if (typeof backwardUrl === 'number') {
+                navigate(backwardUrl);
+              } else if (typeof backwardUrl === 'string') {
+                navigate(backwardUrl);
+              }
+            }}>
+            {/* ПЕРЕВЕДЕНО */}
+            Назад
           </Button>
         )}
       </div>

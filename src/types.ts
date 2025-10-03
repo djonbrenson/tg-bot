@@ -1,3 +1,9 @@
+// src/types.ts - ИСПРАВЛЕННАЯ ВЕРСИЯ
+
+// ИСПРАВЛЕНО: Добавили недостающее определение для EventHandler.
+// Это общий тип, который описывает функцию-обработчик для событий.
+type EventHandler<E extends string> = (payload?: any) => void;
+
 export type TelegramType = {
   WebApp: WebApp;
 };
@@ -187,7 +193,8 @@ export type MainButton = {
    *
    * @param leaveActive If `true`, the button remains enabled while the action in progress. Set to `false` by default.
    */
-  showProgress(this: MainButton, leaveActive: boolean = false): void;
+  // ИСПРАВЛЕНО: Убрали значение по умолчанию `= false` и сделали параметр необязательным с помощью `?`
+  showProgress(this: MainButton, leaveActive?: boolean): void;
 
   /** A method to hide the loading indicator on the button. */
   hideProgress(this: MainButton): void;
