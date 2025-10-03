@@ -13,12 +13,12 @@ function UserProfileButtonMenu() {
       <Link
         to="/bot"
         className="flex w-1/2 flex-col items-center justify-center gap-1 ">
-        <UserOutlined /> تنظیمات ربات
+        <UserOutlined /> Настройки бота
       </Link>
       <Link
         to="/bot/masters"
         className="flex w-1/2 flex-col items-center justify-center gap-1 ">
-        <UnorderedListOutlined /> اساتید
+        <UnorderedListOutlined /> Мастера
       </Link>
     </div>
   );

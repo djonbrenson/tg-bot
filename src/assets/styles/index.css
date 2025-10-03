@@ -13,6 +13,7 @@
   --default-font: -apple-system, "Vazirmatn";
 }
 
+/*
 @font-face {
   font-family: "iransans";
   src: url("/fonts/IRANSansWeb(FaNum).ttf"),
@@ -21,7 +22,7 @@
     url("/fonts/IRANSansWeb(FaNum).eot") format("eot");
 }
 
-/* button,
+ button,
 [type="button"],
 [type="reset"],
 [type="submit"] {

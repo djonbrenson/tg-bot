@@ -18,23 +18,23 @@ function OrdersSingle({ type }: Props) {
   const order = data?.order;
   const items = [
     {
-      label: "لیست سفارشات",
+      label: "Список заказов",
       key: "1",
       children: <OrderList orders={order} loading={isLoading} />
     },
     {
-      label: "اطلاعات تکمیلی ",
+      label: "Дополнительная информация",
       key: "3",
       children: <CustomerDetail orders={order} />
     },
     {
-      label: "تنظبمات سفارش",
+      label: "Настройки заказа",
       key: "2",
       children: <OrderSetting orders={order} />
     }
   ];
   return (
-    <Container title="سفارش" backwardUrl={-1}>
+    <Container title="Заказ" backwardUrl={-1}>
       <Tabs items={type === "user" ? items.splice(0, 2) : items} />
     </Container>
   );

@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable object-curly-newline */
-import { addCommas } from "@persian-tools/persian-tools";
 import { Button, Divider } from "antd";
 import { Link } from "react-router-dom";
 
@@ -55,11 +54,11 @@ function Card({
             className={`flex flex-row gap-3 self-end text-right ${
               finalPrice && " text-sm text-gray-500 line-through"
             }`}>
-            <span>Руб</span> <span>{addCommas(price)}</span>
+            <span>Руб</span> <span>{price.toLocaleString("ru-RU")}</span>
           </div>
           {finalPrice && (
             <div className="flex flex-row gap-3 self-end text-right">
-              <span>Руб</span> <span>{addCommas(discountedPrice)}</span>
+              <span>Руб</span> <span>{discountedPrice.toLocaleString("ru-RU")}</span>
             </div>
           )}
           {/* <div className="self-start text-left">Количество :{quantity} штук/div> */}
