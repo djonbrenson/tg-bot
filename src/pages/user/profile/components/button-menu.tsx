@@ -17,12 +17,12 @@ function UserProfileButtonMenu() {
       <NavLink
         to="/profile/home"
         className="flex w-1/3 flex-col items-center justify-center gap-1 rounded-lg  ">
-        <UserOutlined /> حساب کاربری
+        <UserOutlined /> Личный кабинет
       </NavLink>
       <NavLink
         to="/profile/orders"
         className="flex w-1/3 flex-col items-center justify-center gap-1 rounded-lg ">
-        <UnorderedListOutlined /> سفارشات
+        <UnorderedListOutlined /> Заказы
       </NavLink>
       {/* <div className="flex w-1/4 flex-col items-center justify-center ">
         <UserOutlined />
@@ -30,7 +30,7 @@ function UserProfileButtonMenu() {
       <NavLink
         to="/profile/address"
         className="flex w-1/3 flex-col items-center justify-center gap-1 rounded-lg ">
-        <IdcardOutlined /> آدرس ها
+        <IdcardOutlined /> Адреса
       </NavLink>
     </div>
   );

@@ -14,23 +14,31 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 function Cart() {
   const clearCartMutation = useClearCart();
   const delCartItemMutation = useDeleteCartItem();
-  const { id } = useTelegramUser();
-  const { data, isFetching, isLoading, refetch } = useGetCarts(id);
+  // ИСПРАВЛЕНО: Безопасно получаем пользователя и его ID
+  const user = useTelegramUser();
+  const userId = user?.id ? String(user.id) : "";
+
+  // ИСПРАВЛЕНО: Используем безопасный userId
+  const { data, isFetching, isLoading, refetch } = useGetCarts(userId);
   const [openClearModal, setOpenClearModal] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const navigator = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    refetch();
-  }, [location, refetch]);
+    // Добавим проверку, чтобы не делать лишний запрос, если ID еще нет
+    if (userId) {
+      refetch();
+    }
+  }, [location, refetch, userId]);
 
   const handleDeleteCartItem = (product_id: string | number) => {
     setConfirmLoading(true);
 
     delCartItemMutation.mutate(
       {
-        user_id: `${id}`,
+        // ИСПРАВЛЕНО: Используем безопасный userId
+        user_id: userId,
         product_id
       },
       {
@@ -51,7 +59,8 @@ function Cart() {
     setConfirmLoading(true);
     clearCartMutation.mutate(
       {
-        user_id: `${id}`
+        // ИСПРАВЛЕНО: Используем безопасный userId
+        user_id: userId
       },
       {
         onSuccess: () => {
@@ -139,7 +148,7 @@ function Cart() {
             cancelText="Отмена"
             onCancel={() => setOpenClearModal(false)}>
             <Button
-              disabled={confirmLoading || data?.cartItems.length === 0}
+              disabled={confirmLoading || !data?.cartItems || data.cartItems.length === 0}
               onClick={() => setOpenClearModal(true)}
               className="!w-full"
               style={{ width: "100%" }}
@@ -166,7 +175,7 @@ function Cart() {
                   }
                 })
               }
-              disabled={confirmLoading || data?.cartItems.length === 0}
+              disabled={confirmLoading || !data?.cartItems || data.cartItems.length === 0}
               className="w-full"
               size="large">
               Оформить заказ
