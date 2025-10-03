@@ -1,20 +1,20 @@
 export const GetOrderStatus = (e: string) => {
   switch (e) {
     case "Pending":
-      return " در انتظار تایید ";
+      return "Ожидает подтверждения";
     case "Processing":
-      return "درحال انجام ";
+      return "В процессе";
     case "Packing":
-      return " درحال بسته بندی  ";
+      return "Упаковывается";
     case "CancelledByCustomer":
-      return "لغو توسط مشتری ";
+      return "Отменено клиентом";
     case "CancelledDueToUnavailability":
-      return "اتمام موجودی 1 یا چند کالا";
+      return "Нет в наличии 1 или нескольких товаров";
     case "CancelledByAdmin":
-      return "لغو توسط ادمین";
+      return "Отменено админом";
     case "Shipped":
-      return "تحویل داده شده ";
+      return "Доставлено";
     default:
-      return " در انتظار تایید ";
+      return "Ожидает подтверждения";
   }
 };

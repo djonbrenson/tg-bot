@@ -14,7 +14,7 @@ function CustomerDetail({ orders }: Props) {
     <List className="w-full" bordered>
       <List.Item>
         <List.Item.Meta
-          title="عکس رسید پرداخت :"
+          title="Фото чека об оплате:"
           description={
             <div className="flex w-full items-center justify-center">
               <img
@@ -31,32 +31,32 @@ function CustomerDetail({ orders }: Props) {
       </List.Item>
       <List.Item>
         <List.Item.Meta
-          title="نام کاربر:"
-          description={orders?.user_Full_Name || "ندارد"}
+          title="Имя пользователя:"
+          description={orders?.user_Full_Name || "Нет"}
         />
       </List.Item>
       <List.Item>
         <List.Item.Meta
-          title="آدرس:"
+          title="Адрес:"
           description={`${orders?.full_Address || ""}`}
         />
       </List.Item>
       <List.Item>
         <List.Item.Meta
-          title="کد رهگیری:"
-          description={<div>{orders?.tracking_Code || "ثبت نشده"}</div>}
+          title="Код отслеживания:"
+          description={<div>{orders?.tracking_Code || "Не указан"}</div>}
         />
       </List.Item>
       <List.Item>
         <List.Item.Meta
-          title="تاریخ سفارش:"
+          title="Дата заказа:"
           description={
             <div>
-              <span>شمسی : </span>{" "}
+              <span>По иранскому календарю: </span>{" "}
               {moment(orders?.order_Date).locale("fa").format("YYYY/MM/DD") ||
                 ""}
               <br />
-              <span>میلادی : </span>{" "}
+              <span>По григорианскому календарю: </span>{" "}
               {moment(orders?.order_Date).locale("en").format("YYYY/MM/DD") ||
                 ""}
             </div>

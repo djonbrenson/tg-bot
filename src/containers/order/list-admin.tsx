@@ -31,7 +31,7 @@ function OrderListAdmin() {
     })) || [];
   const columns: ColumnsType<DataType> = [
     {
-      title: "شماره ",
+      title: "Номер заказа",
       width: "fit-content",
       dataIndex: "code",
       key: "code",
@@ -44,8 +44,7 @@ function OrderListAdmin() {
       )
     },
     {
-      title: "نام",
-
+      title: "Имя",
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
@@ -57,8 +56,7 @@ function OrderListAdmin() {
       )
     },
     {
-      title: "مبلغ",
-
+      title: "Сумма",
       dataIndex: "price",
       key: "price",
       render: (text, record) => (
@@ -69,15 +67,14 @@ function OrderListAdmin() {
         </Link>
       )
     },
-
     {
-      title: "وضعیت",
+      title: "Статус",
       dataIndex: "status",
       key: "status",
       render: (text) => <p>{GetOrderStatus(text)}</p>
     },
     {
-      title: "تاریخ ثبت سفارش",
+      title: "Дата заказа",
       dataIndex: "time",
       key: "time",
       render: (text) => (
@@ -87,7 +84,7 @@ function OrderListAdmin() {
   ];
 
   return (
-    <Container backwardUrl={-1} title="لیست سفارشات">
+    <Container backwardUrl={-1} title="Список заказов">
       <Table
         columns={columns}
         loading={isLoading || isFetching}
