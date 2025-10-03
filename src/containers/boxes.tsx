@@ -13,10 +13,10 @@ function Boxes() {
     "w-full h-16 border-2 flex gap-3 border-[var(--tg-theme-button-color)] border-opacity-80 items-center justify-center rounded-lg  ";
   return (
     <div className="flex w-full flex-col gap-3 ">
-      <Divider className="my-0 p-0"> منو </Divider>
+      <Divider className="my-0 p-0">Меню</Divider>
       <div className="grid grid-cols-2 grid-rows-2 gap-2 ">
         <Link className={`${itemClass} col-span-2 `} to="/products">
-          محصولات
+          Продукты
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +35,7 @@ function Boxes() {
         </Link>
 
         <Link className={`${itemClass} col-span-2 `} to="/profile/orders">
-          سفارشات من
+          Мои заказы
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"

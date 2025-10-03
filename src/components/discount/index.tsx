@@ -1,7 +1,9 @@
+// src/components/discount/index.tsx - ИСПРАВЛЕННАЯ ВЕРСИЯ
+
 import useAddDiscounts from "@framework/api/discount/add";
 import useDeleteDiscount from "@framework/api/discount/delete";
 import useUpdateDiscount from "@framework/api/discount/update";
-import { TypeDiscount } from "@framework/types";
+import { TypeDiscount, TypeUpdateDiscount } from "@framework/types";
 import useTelegramUser from "@hooks/useTelegramUser";
 import {
   Alert,
@@ -16,7 +18,6 @@ import { DatePicker, useJalaliLocaleListener } from "antd-jalali";
 import type { RangePickerProps } from "antd/es/date-picker";
 import dayjs from "dayjs";
 import moment from "jalali-moment";
-import { useState } from "react";
 
 interface Props {
   type: "product" | "category";
@@ -25,32 +26,38 @@ interface Props {
 }
 
 function Discount({ type, id, data }: Props) {
-  const { id: userId } = useTelegramUser();
+  // ИСПРАВЛЕНО: Безопасно получаем пользователя
+  const user = useTelegramUser();
   const mutation = useAddDiscounts();
   const updateMutation = useUpdateDiscount({
     discount_id: data?.discount_Id || ""
   });
   const deleteMutation = useDeleteDiscount();
-  const [checked, setChecked] = useState<boolean>(false);
+  
   const disabledDate: RangePickerProps["disabledDate"] = (current) =>
-    // Can not select days before today and today
     current && current < dayjs().endOf("day");
   useJalaliLocaleListener();
-  // dayjs.calendar("jalali");
 
   const handleDeleteDiscount = () => {
+    // ИСПРАВЛЕНО: Добавляем проверку, что все данные на месте
+    if (!data || !user?.id) {
+      message.error("Не удалось получить данные для удаления.");
+      return;
+    }
+
     deleteMutation.mutate(
       {
-        discount_id: data?.discount_Id,
-        user_id: userId.toString()
+        // ИСПРАВЛЕНО: Превращаем ID скидки и ID пользователя в строки
+        discount_id: String(data.discount_Id),
+        user_id: String(user.id)
       },
       {
         onSuccess: () => {
-          message.success("تخفیف شما حذف شد ");
+          message.success("Скидка успешно удалена");
           window.location.reload();
         },
         onError: () => {
-          message.error("حذف تخفیف با مشکل مواجه شد");
+          message.error("Произошла ошибка при удалении скидки");
         }
       }
     );
@@ -58,62 +65,75 @@ function Discount({ type, id, data }: Props) {
 
   return (
     <div>
-      <Divider> تخفیفات </Divider>
+      {/* сикдки */}
+      <Divider> Скидки </Divider>
       <Form
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 20 }}
         initialValues={{
           percent: data?.discount_Value,
-          discount_start_date: data ? dayjs(data?.discount_Start_Date) : null,
-          discount_end_date: data ? dayjs(data?.discount_End_Date) : null
+          discount_start_date: data ? dayjs(data.discount_Start_Date) : null,
+          discount_end_date: data ? dayjs(data.discount_End_Date) : null
         }}
         layout="horizontal"
         className="flex w-full flex-col justify-center gap-4"
         onFinish={({ percent, discount_start_date, discount_end_date }) => {
-          const values = {
+          if (!user?.id) {
+            message.error("Не удалось получить ID пользователя.");
+            return;
+          }
+          const baseValues = {
             category_id: type === "category" ? parseInt(id, 10) : null,
             product_id: type === "product" ? parseInt(id, 10) : null,
-            discount_type: "percent",
+            // ИСПРАВЛЕНО: Явно указываем тип, чтобы TypeScript не ругался
+            discount_type: "percent" as "percent" | "price",
             discount_value: percent,
             discount_start_date: moment(discount_start_date.$d).format() || "",
             discount_end_date: moment(discount_end_date.$d).format() || "",
-            user_id: userId.toString()
+            user_id: String(user.id)
           };
+          
           if (data) {
-            updateMutation.mutate(values, {
+            // ИСПРАВЛЕНО: Добавляем недостающий `discount_Id` для обновления
+            const updateValues: TypeUpdateDiscount = {
+              ...baseValues,
+              discount_Id: data.discount_Id
+            };
+            updateMutation.mutate(updateValues, {
               onSuccess: () => {
-                message.success("تخفیف شما ثبت شد ");
-                // window.location.reload();
+                message.success("Скидка успешно обновлена");
               },
               onError: () => {
-                message.error("ثبت تخفیف با مشکل مواجه شد");
+                message.error("Произошла ошибка при обновлении");
               }
             });
           } else {
-            mutation.mutate(values, {
+            mutation.mutate(baseValues, {
               onSuccess: () => {
-                message.success("تخفیف شما ثبت شد ");
-                // window.location.reload();
+                message.success("Скидка успешно создана");
               },
               onError: () => {
-                message.error("ثبت تخفیف با مشکل مواجه شد");
+                message.error("Произошла ошибка при создании");
               }
             });
           }
         }}>
         <Alert
           type="info"
-          message="تخفیفات بین 1 تا 100 درصد اعمال میشود "
+          message="Скидка применяется в процентах, от 1 до 100"
           showIcon
         />
-        <Form.Item name="percent" required label="درصد">
+        {/* процент */}
+        <Form.Item name="percent" required label="Процент">
           <InputNumber min={1} addonAfter="%" max={100} required />
         </Form.Item>
 
-        <Form.Item name="discount_start_date" required label="از شروع">
+        {/* начало */}
+        <Form.Item name="discount_start_date" required label="Начало">
           <DatePicker />
         </Form.Item>
-        <Form.Item name="discount_end_date" required label="تا پایان">
+        {/* окончание */}
+        <Form.Item name="discount_end_date" required label="Окончание">
           <DatePicker disabledDate={disabledDate} />
         </Form.Item>
 
@@ -121,29 +141,30 @@ function Discount({ type, id, data }: Props) {
           {data && (
             <Popconfirm
               placement="top"
-              title="آیا از حذف تخفیف اطمینان دارید ؟"
-              onConfirm={() => handleDeleteDiscount()}
-              okText="حذف"
+              title="Вы уверены, что хотите удалить скидку?"
+              onConfirm={handleDeleteDiscount}
+              okText="Удалить"
               okType="default"
-              cancelText="انصراف">
+              cancelText="Отмена">
               <Button
                 size="large"
                 loading={deleteMutation.isLoading}
                 style={{ width: "36%" }}
                 danger>
-                حذف تخفیف
+                {/* удалить */}
+                Удалить
               </Button>
             </Popconfirm>
           )}
           <Button
             type="primary"
-            loading={mutation.isLoading}
+            loading={mutation.isLoading || updateMutation.isLoading}
             style={{ width: data ? "65%" : "100%" }}
             size="large"
             ghost
-            // className="sticky bottom-3"
             htmlType="submit">
-            ذخیره
+            {/* сохр */}
+            Сохранить
           </Button>
         </div>
       </Form>

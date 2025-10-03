@@ -2,19 +2,26 @@ import Container from "@components/container";
 import useGetUserInfo from "@framework/api/user-information/get";
 import useUpdateUser from "@framework/api/user-information/update";
 import useTelegramUser from "@hooks/useTelegramUser";
-import { phoneNumberValidator } from "@persian-tools/persian-tools";
+// ВНИМАНИЕ: этот валидатор проверяет только иранские номера. Для РФ может потребоваться другая логика.
+import { phoneNumberValidator } from "@persian-tools/persian-tools"; 
 import { Button, Form, Input, message, Spin } from "antd";
 import { useNavigate } from "react-router";
 
 function EditProfile() {
   const [form] = Form.useForm();
-  const { id } = useTelegramUser();
-  const { data, isFetching, isLoading } = useGetUserInfo({ user_Id: id });
-  const mutation = useUpdateUser({ user_id: id });
+  // ИСПРАВЛЕНО: Безопасно получаем пользователя
+  const user = useTelegramUser();
+  const userId = user?.id ? String(user.id) : "";
+
+  // ИСПРАВЛЕНО: Передаем в хуки безопасный userId
+  const { data, isFetching, isLoading } = useGetUserInfo({ user_Id: userId });
+  const mutation = useUpdateUser({ user_id: userId });
   const navigate = useNavigate();
   const dataLoading = isFetching || isLoading;
+
   return (
-    <Container title="ویرایش حساب کاربری" backwardUrl={-1}>
+    // ПЕРЕВЕДЕНО
+    <Container title="Редактирование профиля" backwardUrl={-1}>
       <Spin spinning={dataLoading}>
         {dataLoading ? (
           <div className="h-[350px]" />
@@ -31,54 +38,66 @@ function EditProfile() {
               email: data?.email,
               username: data?.username
             }}
-            onFinish={(e) => {
-              console.log(e);
-              if (!phoneNumberValidator(e.phone_number)) {
-                message.error("شماره همراه وارد شده اشتباه است");
+            onFinish={(values) => {
+              // Валидация номера телефона. Для РФ может потребоваться другая.
+              if (!phoneNumberValidator(values.phone_number)) {
+                // ПЕРЕВЕДЕНО
+                message.error("Введенный номер телефона некорректен");
                 form.scrollToField("phone_number");
               } else {
-                mutation.mutate(e, {
+                mutation.mutate(values, {
                   onSuccess: () => {
-                    message.success("حساب کاربری شما بروزرسانی شد ");
+                    // ПЕРЕВЕДЕНО
+                    message.success("Данные профиля успешно обновлены");
                     navigate(-1);
                   },
-                  onError: (e) => {
-                    message.error("مشکل در بروزرسانی حساب کاربری ");
+                  onError: () => {
+                    // ПЕРЕВЕДЕНО
+                    message.error("Произошла ошибка при обновлении профиля");
                   }
                 });
               }
             }}
             autoComplete="off">
             <Form.Item
-              label="نام"
+              // ПЕРЕВЕДЕНО
+              label="Имя"
               name="name"
-              rules={[{ required: true, message: "اجباری" }]}>
+              // ПЕРЕВЕДЕНО
+              rules={[{ required: true, message: "Обязательное поле" }]}>
               <Input />
             </Form.Item>
             <Form.Item
-              label="نام خانوادگی"
+              // ПЕРЕВЕДЕНО
+              label="Фамилия"
               name="last_name"
-              rules={[{ required: true, message: "اجباری" }]}>
+              // ПЕРЕВЕДЕНО
+              rules={[{ required: true, message: "Обязательное поле" }]}>
               <Input />
             </Form.Item>
-            <Form.Item label="نام کاربری" name="username">
+            <Form.Item 
+              // ПЕРЕВЕДЕНО
+              label="Имя пользователя" 
+              name="username">
               <Input disabled />
             </Form.Item>
             <Form.Item
-              label="ایمیل"
-              rules={[{ required: true, message: "اجباری" }]}
+              // ПЕРЕВЕДЕНО
+              label="Email"
+              // ПЕРЕВЕДЕНО
+              rules={[{ required: true, message: "Обязательное поле" }]}
               name="email">
-              <Input typeof="email" />
+              <Input type="email" />
             </Form.Item>
             <Form.Item
-              label="شماره همراه"
+              // ПЕРЕВЕДЕНО
+              label="Номер телефона"
               name="phone_number"
               rules={[
                 {
+                  // ПЕРЕВЕДЕНО
                   required: true,
-                  message: "اجباری",
-                  min: 11,
-                  max: 11
+                  message: "Обязательное поле"
                 }
               ]}>
               <Input />
@@ -86,7 +105,8 @@ function EditProfile() {
 
             <Form.Item>
               <Button className="w-full " size="large" htmlType="submit">
-                ذخیره
+                {/* ПЕРЕВЕДЕНО */}
+                Сохранить
               </Button>
             </Form.Item>
           </Form>

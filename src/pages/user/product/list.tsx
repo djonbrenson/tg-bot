@@ -1,16 +1,16 @@
 import Container from "@components/container";
 import ProductLists from "@components/product/list";
 import ProductsSkeleton from "@components/skeleton/products";
-import { useGetProducts } from "@framework/api/product/get";
+// import { useGetProducts } from "@framework/api/product/get"; // Больше не нужно
 import { Suspense } from "react";
 
 function ProductList() {
-  const { data } = useGetProducts({});
-  console.log(data);
+  // const { data } = useGetProducts({}); // УДАЛЕНО
   return (
-    <Container title="محصولات" backwardUrl="/">
+    <Container title="Продукты" backwardUrl="/">
       <Suspense fallback={<ProductsSkeleton />}>
-        <ProductLists pageType="user" data={data} />
+        {/* УДАЛЕНО data={data} */}
+        <ProductLists pageType="user" />
       </Suspense>
     </Container>
   );

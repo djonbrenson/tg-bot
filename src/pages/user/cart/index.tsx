@@ -35,12 +35,12 @@ function Cart() {
       },
       {
         onSuccess: () => {
-          message.success("حذف شد");
+          message.success("Удалено");
           setConfirmLoading(false);
           refetch();
         },
         onError: () => {
-          message.error("مشکلی رخ داده. دوباره تلاش کنید");
+          message.error("Произошла ошибка. Попробуйте снова");
           setConfirmLoading(false);
           refetch();
         }
@@ -55,13 +55,13 @@ function Cart() {
       },
       {
         onSuccess: () => {
-          message.success("سبد شما خالی شد ");
+          message.success("Ваша корзина очищена");
           setConfirmLoading(false);
           setOpenClearModal(false);
           refetch();
         },
         onError: () => {
-          message.error("مشکلی رخ داده. دوباره تلاش کنید");
+          message.error("Произошла ошибка. Попробуйте снова");
           setConfirmLoading(false);
           setOpenClearModal(false);
           refetch();
@@ -70,7 +70,7 @@ function Cart() {
     );
   };
   return (
-    <Container title="سبد خرید" backwardUrl="/">
+    <Container title="Корзина" backwardUrl="/">
       <div className="flex flex-col gap-5">
         <div className=" rounded-lg bg-[var(--tg-theme-secondary-bg-color)] p-3 transition-all ">
           <List
@@ -80,11 +80,6 @@ function Cart() {
             renderItem={(item, index) => (
               <List.Item key={index}>
                 <List.Item.Meta
-                  // avatar={
-                  //   <Avatar
-                  //     src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
-                  //   />
-                  // }
                   title={
                     <div className="w-full text-start">
                       <Link to={`/products/${item.product_Id}`}>
@@ -95,22 +90,22 @@ function Cart() {
                   description={
                     <div className="flex flex-col gap-3  ">
                       <div className="flex flex-row gap-1">
-                        <span>تومان</span>
+                        <span>Руб</span>
                         <span>{addCommas(item.discountedPrice)}</span>
-                        <span>: قیمت واحد</span>
+                        <span>: Цена за единицу</span>
                       </div>
                       <div className="flex gap-1">
-                        <span>عدد</span>
+                        <span>шт.</span>
                         <span>{item.quantity}</span>
-                        <span>: تعداد</span>
+                        <span>: Количество</span>
                       </div>
 
                       <div className="flex flex-row gap-1">
-                        <span>تومان</span>
+                        <span>Руб</span>
                         <span>
                           {addCommas(item.discountedPrice * item.quantity)}
                         </span>
-                        <span>: قیمت کل</span>
+                        <span>: Общая цена</span>
                       </div>
                     </div>
                   }
@@ -119,13 +114,13 @@ function Cart() {
                 <div>
                   <Popconfirm
                     placement="left"
-                    title="حذف این محصول ؟"
+                    title="Удалить этот продукт?"
                     onConfirm={() => handleDeleteCartItem(item.product_Id)}
-                    okText="حذف"
+                    okText="Удалить"
                     okType="default"
-                    cancelText="انصراف">
+                    cancelText="Отмена">
                     <Button disabled={confirmLoading} size="small">
-                      حذف
+                      Удалить
                     </Button>
                   </Popconfirm>
                 </div>
@@ -133,15 +128,15 @@ function Cart() {
             )}
           />
           <Popconfirm
-            title="توجه"
-            description="آیا از حذف کردن تمام سفارشات خود اطمینان دارید ؟"
+            title="Внимание"
+            description="Вы уверены, что хотите удалить все заказы?"
             open={openClearModal}
             onConfirm={handleClearCart}
             okButtonProps={{ loading: confirmLoading }}
             cancelButtonProps={{ disabled: confirmLoading }}
             okType="default"
-            okText={confirmLoading ? "درحال حذف" : "تایید"}
-            cancelText="انصراف"
+            okText={confirmLoading ? "Удаление..." : "Подтвердить"}
+            cancelText="Отмена"
             onCancel={() => setOpenClearModal(false)}>
             <Button
               disabled={confirmLoading || data?.cartItems.length === 0}
@@ -149,16 +144,16 @@ function Cart() {
               className="!w-full"
               style={{ width: "100%" }}
               size="large">
-              حذف همه
+              Удалить всё
             </Button>
           </Popconfirm>
         </div>
         <div className="flex flex-col gap-5  rounded-lg bg-[var(--tg-theme-secondary-bg-color)] p-3 transition-all">
           <div>
             <p className="flex w-full flex-row-reverse items-center justify-center gap-2">
-              <span>قیمت کل </span>
-              <span>{addCommas(data?.totalPrice)}</span>
-              <span>تومان</span>
+              <span>Общая стоимость</span>
+              <span>{addCommas(data?.totalPrice ?? 0)}</span>
+              <span>Руб</span>
             </p>
           </div>
 
@@ -174,7 +169,7 @@ function Cart() {
               disabled={confirmLoading || data?.cartItems.length === 0}
               className="w-full"
               size="large">
-              نهایی کردن خرید
+              Оформить заказ
             </Button>
           </div>
         </div>

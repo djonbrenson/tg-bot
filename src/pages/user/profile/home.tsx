@@ -18,20 +18,30 @@ function StatusBox({ title, total }: { title: string; total: number }) {
 function UserProfileHome() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id } = useTelegramUser();
+  // ИСПРАВЛЕНО: Безопасно получаем пользователя и его ID
+  const user = useTelegramUser();
+  const userId = user?.id ? String(user.id) : "";
+  
   const { data, isFetching, isLoading, refetch } = useGetUserInfo({
-    user_Id: id
+    // ИСПРАВЛЕНО: Используем безопасный userId
+    user_Id: userId
   });
+
   useEffect(() => {
-    refetch();
-  }, [location, refetch]);
+    // Добавим проверку, чтобы не делать лишний запрос, если ID еще нет
+    if (userId) {
+      refetch();
+    }
+  }, [location, refetch, userId]);
+
   const isCompleteProfile =
     !data?.phone_Number || !data?.name || !data?.last_Name;
+    
   return (
     <Container
-      title="حساب کاربری"
+      title="Личный кабинет"
       customButton
-      customButtonTitle="ویرایش"
+      customButtonTitle="Редактировать"
       customButtonOnClick={() => navigate("edit")}
       backwardUrl="/">
       {/* <div className="grid h-52 w-full grid-cols-2 gap-2">
@@ -45,11 +55,11 @@ function UserProfileHome() {
           type="info"
           message={
             <div className="flex">
-              <div>لطفا حساب کاربری خود را قبل از ثبت سفارش تکمیل کنید</div>
+              <div>Пожалуйста, заполните профиль перед оформлением заказа</div>
               <Link
                 className=" mx-2 flex items-center justify-center rounded-lg border-2 px-2"
                 to="edit">
-                تکمیل
+                Заполнить
               </Link>
             </div>
           }
@@ -58,16 +68,16 @@ function UserProfileHome() {
       <List loading={isFetching || isLoading} className="mt-5 w-full" bordered>
         <List.Item>
           <List.Item.Meta
-            title="نام :"
+            title="Имя:"
             description={
-              `${data?.name || ""} ${data?.last_Name || ""}` || "ندارد"
+              `${data?.name || ""} ${data?.last_Name || ""}` || "Нет данных"
             }
           />
         </List.Item>
         <List.Item>
           <List.Item.Meta
-            title="شماره همراه:"
-            description={`${data?.phone_Number || "ندارد"}`}
+            title="Телефон:"
+            description={`${data?.phone_Number || "Нет данных"}`}
           />
         </List.Item>
       </List>

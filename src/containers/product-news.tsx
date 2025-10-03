@@ -10,7 +10,7 @@ function ProductNews() {
   });
   return (
     <div className="flex flex-col  gap-3">
-      <Divider className="my-0 p-0"> محصولات جدید ما </Divider>
+      <Divider className="my-0 p-0">Наши новые продукты</Divider>
 
       <div className="grid grid-cols-2  gap-2">
         {isLoading || isFetching ? (
