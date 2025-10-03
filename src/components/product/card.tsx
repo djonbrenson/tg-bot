@@ -48,24 +48,24 @@ function Card({
             <div className="rounded-xl bg-[var(--tg-theme-secondary-bg-color)] px-1 pt-1 text-sm ">
               ⭐4.3
             </div>
-            <div className="select-none text-sm">غذا</div>
+            <div className="select-none text-sm">еда</div>
           </div> */}
           <Divider className="my-0 py-0" />
           <div
             className={`flex flex-row gap-3 self-end text-right ${
               finalPrice && " text-sm text-gray-500 line-through"
             }`}>
-            <span>تومان</span> <span>{addCommas(price)}</span>
+            <span>Руб</span> <span>{addCommas(price)}</span>
           </div>
           {finalPrice && (
             <div className="flex flex-row gap-3 self-end text-right">
-              <span>تومان</span> <span>{addCommas(discountedPrice)}</span>
+              <span>Руб</span> <span>{addCommas(discountedPrice)}</span>
             </div>
           )}
-          {/* <div className="self-start text-left">تعداد :{quantity} عدد</div> */}
+          {/* <div className="self-start text-left">Количество :{quantity} штук/div> */}
         </div>
         <Button className="w-full self-end" type="default">
-          دیدن محصول
+          Посмотреть продукт
         </Button>
       </div>
     </Link>

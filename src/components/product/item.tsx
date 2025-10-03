@@ -12,6 +12,7 @@ interface Props {
   imageURL: string | Array<string>;
   pageType: "admin" | "user";
   discountedPrice: number;
+  product_Id: number;
 }
 
 function ProductItem({
@@ -52,15 +53,15 @@ function ProductItem({
             className={`flex flex-row gap-3 self-end text-right ${
               finalPrice && " text-sm text-gray-500 line-through"
             }`}>
-            <span>تومان</span> <span>{addCommas(price)}</span>
+            <span>Руб</span> <span>{addCommas(price)}</span>
           </div>
           {finalPrice && (
             <div className="flex flex-row gap-3 self-end text-right">
-              <span>تومان</span> <span>{addCommas(discountedPrice)}</span>
+              <span>Руб</span> <span>{addCommas(discountedPrice)}</span>
             </div>
           )}
           {pageType === "admin" && (
-            <div className="self-end  text-left">تعداد :{quantity} عدد</div>
+            <div className="self-end  text-left">Количество :{quantity} штук</div>
           )}
         </div>
       </div>
